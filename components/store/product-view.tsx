@@ -1,6 +1,7 @@
 import Image from 'next/image'
-import { Minus, Plus, ShieldCheck, Star, Truck, Zap } from 'lucide-react'
+import { Minus, Plus, ShieldCheck, Truck, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ReviewsSection, StarRating } from '@/components/store/reviews-section'
 import { cn } from '@/lib/utils'
 import { PRODUCTS, formatPrice, type Product } from '@/lib/products'
 
@@ -42,24 +43,29 @@ export function ProductView({
           <span className="absolute left-4 top-4 rounded-full bg-primary px-2.5 py-1 font-mono text-xs font-semibold text-primary-foreground">
             -{discount}%
           </span>
+          <div
+            className="absolute bottom-3 left-3 flex gap-2 rounded-2xl bg-background/70 p-1.5 backdrop-blur"
+            role="group"
+            aria-label="Other products"
+          >
+            {PRODUCTS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => onSwitchProduct(p.id)}
+                aria-pressed={p.id === product.id}
+                aria-label={p.name}
+                className={cn(
+                  'relative size-12 overflow-hidden rounded-xl border-2 transition',
+                  p.id === product.id ? 'border-primary' : 'border-transparent opacity-70 hover:opacity-100',
+                )}
+              >
+                <Image src={p.image || '/placeholder.svg'} alt="" fill sizes="48px" className="object-cover" />
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="flex shrink-0 gap-3" role="group" aria-label="Other products">
-          {PRODUCTS.map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => onSwitchProduct(p.id)}
-              aria-pressed={p.id === product.id}
-              aria-label={p.name}
-              className={cn(
-                'relative size-16 overflow-hidden rounded-xl border-2 transition-colors',
-                p.id === product.id ? 'border-primary' : 'border-transparent opacity-60 hover:opacity-100',
-              )}
-            >
-              <Image src={p.image || '/placeholder.svg'} alt="" fill sizes="64px" className="object-cover" />
-            </button>
-          ))}
-        </div>
+        <ReviewsSection key={product.id} product={product} />
       </div>
 
       <div className="flex flex-col gap-5">
@@ -69,14 +75,7 @@ export function ProductView({
             {product.name}
           </h1>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span className="flex" aria-hidden="true">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className={cn('size-3.5', i < Math.round(product.rating) ? 'fill-primary text-primary' : 'text-muted-foreground')}
-                />
-              ))}
-            </span>
+            <StarRating rating={product.rating} />
             <span>
               {product.rating} ({product.reviews.toLocaleString()} reviews)
             </span>
