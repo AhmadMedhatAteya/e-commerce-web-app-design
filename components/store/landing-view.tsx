@@ -25,7 +25,7 @@ export function LandingView({ featured, products, onOpenProduct }: LandingViewPr
             New drop — VOLT H1 is live
           </span>
           <h1 id="hero-title" className="text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-6xl">
-            Flagship tech. <span className="text-primary">Not flagship prices.</span>
+            Welcome to <span className="text-primary">My Store</span>
           </h1>
           <p className="max-w-md text-pretty leading-relaxed text-muted-foreground">
             Audio and wearables engineered with pro-grade specs, sold direct so you skip the markup.
